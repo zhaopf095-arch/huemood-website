@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HueMood — Color Lives in Every Image</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray: #b3b3b3;
+      --gray-dim: #7c7a7a;
+      --purple-deep: #1a0d2e;
+      --purple-mid: #3f2c4e;
+      --purple-card: #2d2037;
+      --purple-accent: #8b5cf6;
+      --border-dim: rgba(174,174,174,0.2);
+      --border-btn: #4d4d4d;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', 'PingFang HK', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(.22,1,.36,1), transform 0.8s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.35s; }
+    .reveal-delay-4 { transition-delay: 0.5s; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 60px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(0,0,0,0.6);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.4s;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+    .nav-logo span {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--white);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 400;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .nav-lang {
+      color: var(--gray-dim);
+      font-size: 14px;
+      cursor: pointer;
+      transition: color 0.25s;
+    }
+    .nav-lang:hover { color: var(--white); }
+    .btn-download-nav {
+      padding: 10px 24px;
+      border: 1.5px solid var(--border-btn);
+      border-radius: 40px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+    }
+    .btn-download-nav:hover {
+      border-color: var(--purple-accent);
+      background: rgba(139,92,246,0.12);
+      transform: translateY(-1px);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 140px 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Ambient gradient orbs — flipyear-inspired */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 800px; height: 800px;
+      top: -200px; left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%);
+      pointer-events: none;
+      animation: orbPulse 6s ease-in-out infinite;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      bottom: 0; right: -100px;
+      background: radial-gradient(circle, rgba(63,44,78,0.3) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    @keyframes orbPulse {
+      0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+      50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(52px, 7vw, 96px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      max-width: 900px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Gradient text shimmer — shared across all sections */
+    .gradient-word {
+      background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #c0f0ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% 200%;
+      animation: gradientShift 4s ease infinite;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .hero-subtitle {
+      margin-top: 24px;
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--gray);
+      max-width: 560px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .download-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 44px;
+      position: relative;
+      z-index: 1;
+    }
+    .download-badge {
+      display: block;
+      height: 52px;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.25s cubic-bezier(.22,1,.36,1), box-shadow 0.25s;
+    }
+    .download-badge img { height: 100%; display: block; }
+    .download-badge:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(139,92,246,0.3);
+    }
+
+    /* ─── HERO CARD ─── */
+    .hero-card-wrap {
+      margin-top: 72px;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 900px;
+    }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #3f2c4e 0%, #1c1c1e 100%);
+      aspect-ratio: 16/7;
+    }
+    .hero-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 28px;
+    }
+    /* Hero card floating icon buttons */
+    .hero-card-btn {
+      position: absolute;
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+      z-index: 2;
+      transform: translate(-50%, -50%);
+      transition: transform 0.3s cubic-bezier(.22,1,.36,1), filter 0.3s;
+    }
+    .hero-card-btn img {
+      width: 5.5%;
+      min-width: 40px;
+      max-width: 64px;
+      aspect-ratio: 1;
+      display: block;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-card-btn:hover {
+      transform: translate(-50%, -50%) scale(1.18);
+      filter: drop-shadow(0 0 10px rgba(139,92,246,0.9));
+    }
+    /* positions calculated from Figma coords + object-fit:cover crop offset */
+    .hero-card-btn-left  { left: 7.8%;  top: 13.7%; }
+    .hero-card-btn-right { left: 88.6%; top: 13.7%; }
+
+    .hero-card-badge-left,
+    .hero-card-badge-right {
+      position: absolute;
+      background: var(--purple-card);
+      border: 1px solid var(--border-dim);
+      border-radius: 16px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--gray);
+      backdrop-filter: blur(10px);
+    }
+    .hero-card-badge-left { left: 24px; bottom: 30px; }
+    .hero-card-badge-right { right: 24px; top: 30px; }
+    .badge-color-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* ─── SECTION SHARED ─── */
+    section { position: relative; }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+
+    /* ─── FEATURES HEADING ─── */
+    .features-heading {
+      text-align: center;
+      padding: 120px 60px 80px;
+    }
+    .features-heading h2 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(40px, 6vw, 80px);
+      line-height: 1.1;
+      color: var(--white);
+    }
+    .features-heading .section-label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--purple-accent);
+      margin-bottom: 16px;
+      padding: 6px 16px;
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 40px;
+    }
+
+    /* ─── FEATURE ROW ─── */
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      padding: 80px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .feature-row.reverse { direction: rtl; }
+    .feature-row.reverse > * { direction: ltr; }
+
+    .feature-text .feature-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      font-family: 'Inter', sans-serif;
+    }
+    .num-1 { background: #E8C157; color: #1a1000; }
+    .num-2 { background: #33CCCC; color: #001a1a; }
+    .num-3 { background: #8033CC; color: #ffffff; }
+    .feature-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: clamp(28px, 3.5vw, 48px);
+      line-height: 1.15;
+      color: var(--white);
+      text-transform: capitalize;
+      margin-bottom: 20px;
+    }
+    .feature-text p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--gray);
+      max-width: 460px;
+    }
+
+    .feature-phone-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .feature-phone {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 44px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+      animation: phoneFloat 6s ease-in-out infinite;
+      object-fit: cover;
+    }
+    .feature-row:nth-child(odd) .feature-phone { animation-delay: 0s; }
+    .feature-row:nth-child(even) .feature-phone { animation-delay: 1.5s; }
+    @keyframes phoneFloat {
+      0%, 100% { transform: translateY(0px) rotate(1deg); }
+      50% { transform: translateY(-14px) rotate(1deg); }
+    }
+
+    /* Glow behind phone */
+    .feature-phone-wrap::before {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%);
+      pointer-events: none;
+      animation: phoneFloat 6s ease-in-out infinite;
+    }
+
+    /* ─── DIVIDER ─── */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      margin: 0 auto;
+      max-width: 1200px;
+    }
+
+    /* ─── PRIVACY ─── */
+    .privacy-section {
+      padding: 140px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .privacy-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center top, rgba(63,44,78,0.25) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .privacy-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(36px, 5.5vw, 76px);
+      line-height: 1.1;
+      color: var(--white);
+      max-width: 800px;
+      margin: 0 auto 20px;
+    }
+    .privacy-section p {
+      font-size: 17px;
+      color: var(--gray);
+      max-width: 520px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+    }
+    .privacy-badges {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .privacy-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border: 1.5px solid rgba(180,180,180,0.25);
+      border-radius: 60px;
+      color: var(--white);
+      font-size: 15px;
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(10px);
+      transition: border-color 0.3s, background 0.3s, transform 0.3s;
+    }
+    .privacy-badge:hover {
+      border-color: var(--purple-accent);
+      background: rgba(139,92,246,0.1);
+      transform: translateY(-2px);
+    }
+    .privacy-badge svg {
+      width: 22px; height: 22px;
+      flex-shrink: 0;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 40px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-logo img { width: 28px; border-radius: 8px; }
+    .footer-logo span {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--white);
+    }
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .footer-links a {
+      color: var(--gray-dim);
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy {
+      font-size: 12px;
+      color: #444;
+    }
+
+    /* ─── SCROLL PROGRESS BAR ─── */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #8b5cf6, #c0f0ff);
+      z-index: 200;
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.1s linear;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 120px 24px 60px; }
+      .feature-row {
+        grid-template-columns: 1fr;
+        gap: 48px;
+        padding: 60px 24px;
+      }
+      .feature-row.reverse { direction: ltr; }
+      .features-heading { padding: 80px 24px 48px; }
+      .privacy-section { padding: 100px 24px; }
+      footer { flex-direction: column; gap: 24px; padding: 32px 24px; }
+      .section-inner { padding: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ─── NAVIGATION ─── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="images/app-icon.png" alt="HueMood" />
+    <span>HueMood</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#work">Our Work</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#privacy">Privacy Policy</a></li>
+    <li><a href="#terms">Terms of Use</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-cta">
+    <span class="nav-lang">中文</span>
+    <a href="#" class="btn-download-nav">Download</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <h1 class="hero-title reveal">
+    Ignite your <span class="gradient-word">creativity</span><br />in this moment
+  </h1>
+  <p class="hero-subtitle reveal reveal-delay-1">
+    Capture thousands of colors, create freely, and record every spark of inspiration in life.
+  </p>
+  <div class="download-row reveal reveal-delay-2">
+    <a href="#" class="download-badge">
+      <img src="images/badge-a.png" alt="Download on the App Store" />
+    </a>
+    <a href="#" class="download-badge">
+      <img src="images/badge-b.png" alt="Get it on Google Play" />
+    </a>
+  </div>
+
+  <!-- Hero visual card -->
+  <div class="hero-card-wrap reveal reveal-delay-3" id="work">
+    <div class="hero-card">
+      <img
+        class="hero-card-img"
+        src="images/hero-main.png"
+        alt="HueMood color picker"
+      />
+      <button class="hero-card-btn hero-card-btn-left" aria-label="Color picker">
+        <img src="images/icon-eyedropper.png" alt="Color picker" />
+      </button>
+      <button class="hero-card-btn hero-card-btn-right" aria-label="Gallery">
+        <img src="images/icon-gallery.png" alt="Gallery" />
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES HEADING ─── -->
+<section class="features-heading" id="features">
+  <h2 class="reveal"><span class="gradient-word">Our Highlight</span> Features</h2>
+</section>
+
+<!-- ─── FEATURE 1: Art Gallery ─── -->
+<div class="feature-row">
+  <div class="feature-text reveal">
+    <div class="feature-num num-1">1</div>
+    <h3>Extensive Image Library,<br />Fuel Your Design Vision.</h3>
+    <p>Analyze instantly, capture nature's true colors.</p>
+  </div>
+  <div class="feature-phone-wrap reveal reveal-delay-2">
+    <img
+      class="feature-phone"
+      src="images/feature1-phone.png"
+      alt="Art gallery feature"
+    />
+  </div>
+</div>
+
+<div class="section-divider" style="padding: 0 60px;"><div class="section-divider"></div></div>
+
+<!-- ─── FEATURE 2: Color Space ─── -->
+<div class="feature-row reverse">
+  <div class="feature-text reveal">
+    <div class="feature-num num-2">2</div>
+    <h3>Upload Albums,<br />Sense Every Hue.</h3>
+    <p>Sense and pick colors automatically.</p>
+  </div>
+  <div class="feature-phone-wrap reveal reveal-delay-2">
+    <img
+      class="feature-phone"
+      src="images/feature2-phone.png"
+      alt="Color space feature"
+    />
+  </div>
+</div>
+
+<div style="padding: 0 60px;"><div class="section-divider"></div></div>
+
+<!-- ─── FEATURE 3: Color Marking ─── -->
+<div class="feature-row">
+  <div class="feature-text reveal">
+    <div class="feature-num num-3">3</div>
+    <h3>Tap the image,<br />meet the colors within.</h3>
+    <p>Accurate positioning, smart color recognition.</p>
+  </div>
+  <div class="feature-phone-wrap reveal reveal-delay-2">
+    <img
+      class="feature-phone"
+      src="images/feature3-phone.png"
+      alt="Color marking feature"
+    />
+  </div>
+</div>
+
+<!-- ─── PRIVACY ─── -->
+<section class="privacy-section" id="privacy">
+  <h2 class="reveal">Your photos remain <span class="gradient-word">local,</span><br />no cloud uploads.</h2>
+  <p class="reveal reveal-delay-1">All processing is done locally on your device. No internet, no uploads.</p>
+  <div class="privacy-badges reveal reveal-delay-2">
+    <div class="privacy-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <polyline points="9 12 11 14 15 10"/>
+      </svg>
+      100% On-Device
+    </div>
+    <div class="privacy-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="11" width="14" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      No Account Required
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer id="contact">
+  <div class="footer-logo">
+    <img src="images/app-icon.png" alt="HueMood" />
+    <span>HueMood</span>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#privacy">Privacy Policy</a></li>
+    <li><a href="#terms">Terms of Use</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <span class="footer-copy">© 2026 HueMood. Made for creators.</span>
+</footer>
+
+<script>
+  // ─── SCROLL REVEAL ───
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // ─── PROGRESS BAR ───
+  const bar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    bar.style.transform = `scaleX(${Math.min(scrolled, 1)})`;
+  });
+
+  // ─── PARALLAX ORBS ───
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    document.querySelectorAll('.feature-phone-wrap::before').forEach(() => {});
+    // Subtle parallax on hero orb via CSS var
+    document.documentElement.style.setProperty('--scroll-y', `${y * 0.2}px`);
+  });
+
+  // ─── NAV SCROLL STATE ───
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 60
+      ? 'rgba(0,0,0,0.85)'
+      : 'rgba(0,0,0,0.6)';
+  });
+</script>
+</body>
+</html>
