@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — HueMood</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray: #b3b3b3;
+      --gray-dim: #7c7a7a;
+      --purple-deep: #1a0d2e;
+      --purple-accent: #8b5cf6;
+      --border-dim: rgba(174,174,174,0.2);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', 'PingFang HK', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-dim);
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--white);
+      font-weight: 500; font-size: 16px;
+    }
+    .nav-logo img { width: 28px; border-radius: 8px; }
+
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      text-decoration: none;
+      color: var(--gray);
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .btn-back:hover { color: var(--white); }
+    .btn-back svg { width: 16px; height: 16px; }
+
+    /* ─── CONTENT ─── */
+    .page-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 140px 32px 80px;
+    }
+
+    .page-label {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--purple-accent);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .last-updated {
+      font-size: 13px;
+      color: var(--gray-dim);
+      margin-bottom: 56px;
+    }
+
+    .section {
+      margin-bottom: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+    .section:last-of-type { border-bottom: none; }
+
+    .section h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: var(--white);
+    }
+
+    .section p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--gray);
+      margin-bottom: 12px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+
+    .section ul {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+    .section ul li {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--gray);
+      margin-bottom: 6px;
+    }
+
+    .highlight-box {
+      background: rgba(139, 92, 246, 0.08);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 24px;
+    }
+    .highlight-box p {
+      margin: 0;
+      color: rgba(255,255,255,0.8);
+    }
+
+    a.inline-link {
+      color: var(--purple-accent);
+      text-decoration: none;
+    }
+    a.inline-link:hover { text-decoration: underline; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 32px 48px;
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .footer-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 500;
+    }
+    .footer-logo img { width: 28px; border-radius: 8px; }
+
+    .footer-links {
+      list-style: none;
+      display: flex; gap: 28px;
+    }
+    .footer-links a {
+      color: var(--gray-dim);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--gray-dim);
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 24px; }
+      .page-wrap { padding: 120px 24px 60px; }
+      footer { flex-direction: column; gap: 20px; padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="images/app-icon.png" alt="HueMood" />
+    HueMood
+  </a>
+  <a href="index.html" class="btn-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+    Back to Home
+  </a>
+</nav>
+
+<!-- ─── CONTENT ─── -->
+<div class="page-wrap">
+
+  <p class="page-label">Legal</p>
+  <h1>Privacy Policy</h1>
+  <p class="last-updated">Last updated: April 2026</p>
+
+  <div class="section">
+    <h2>Overview</h2>
+    <p>HueMood ("we", "our", or "the app") is a color extraction tool for iOS. We built HueMood with privacy as a core principle — your photos and creative work stay on your device.</p>
+    <div class="highlight-box">
+      <p>🔒 All photo processing is done entirely on your device. No images, color palettes, or personal data are ever uploaded to our servers.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Information We Do Not Collect</h2>
+    <p>HueMood does not collect, store, or transmit:</p>
+    <ul>
+      <li>Photos or images you upload or process in the app</li>
+      <li>Color palettes you create or save</li>
+      <li>Your name, email address, or any personal identifiers</li>
+      <li>Location data</li>
+      <li>Usage analytics or behavioral tracking data</li>
+      <li>Device identifiers for advertising purposes</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Photo Library Access</h2>
+    <p>HueMood requests access to your photo library solely to allow you to select images for color extraction. Photos you select are processed locally using on-device algorithms and are never transmitted outside your device.</p>
+    <p>You can revoke photo library access at any time in your iPhone's Settings → Privacy & Security → Photos.</p>
+  </div>
+
+  <div class="section">
+    <h2>Subscriptions & Purchases</h2>
+    <p>HueMood offers an optional subscription (HueMood Pro) managed entirely through Apple's App Store and StoreKit framework. We do not process payments directly and do not receive your payment information.</p>
+    <p>Purchase history and subscription status are handled by Apple. Please refer to <a class="inline-link" href="https://www.apple.com/legal/privacy/" target="_blank">Apple's Privacy Policy</a> for information on how they handle transaction data.</p>
+  </div>
+
+  <div class="section">
+    <h2>Data Storage</h2>
+    <p>Any data generated by your use of HueMood — including saved color palettes and app preferences — is stored locally on your device using iOS standard storage (UserDefaults and app sandbox). This data is not accessible to us and is not backed up to any external server operated by HueMood.</p>
+    <p>If you enable iCloud Backup on your device, this locally stored data may be included in your iCloud backup as part of the standard iOS backup process, governed by Apple's privacy policy.</p>
+  </div>
+
+  <div class="section">
+    <h2>Third-Party Services</h2>
+    <p>HueMood does not integrate third-party analytics, advertising SDKs, or tracking libraries. The only third-party service involved is Apple's StoreKit for subscription management.</p>
+  </div>
+
+  <div class="section">
+    <h2>Children's Privacy</h2>
+    <p>HueMood does not knowingly collect any information from children under the age of 13. The app does not require account creation or personal information to function.</p>
+  </div>
+
+  <div class="section">
+    <h2>Changes to This Policy</h2>
+    <p>If we make material changes to this Privacy Policy, we will update the "Last updated" date at the top of this page. We encourage you to review this page periodically. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
+  </div>
+
+  <div class="section">
+    <h2>Contact Us</h2>
+    <p>If you have any questions or concerns about this Privacy Policy, please contact us at:</p>
+    <p><a class="inline-link" href="mailto:eremecmepap@mail.com">eremecmepap@mail.com</a></p>
+  </div>
+
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-logo">
+    <img src="images/app-icon.png" alt="HueMood" />
+    HueMood
+  </div>
+  <ul class="footer-links">
+    <li><a href="privacy.html">Privacy Policy</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <span class="footer-copy">© 2026 HueMood. Made for creators.</span>
+</footer>
+
+</body>
+</html>
