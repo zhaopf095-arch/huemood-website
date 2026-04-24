@@ -1,332 +1,160 @@
- 1 <!DOCTYPE html>
-    2 <html lang="en">
-    3 <head>
-    4   <meta charset="UTF-8" />
-    5   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    6   <title>Terms of Use — HueMood</title>
-    7   <link rel="preconnect" href="https://fonts.googleapis.com" />
-    8   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    9   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wgh
-      t@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-   10   <style>
-   11     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0;
-       }
-   12
-   13     :root {
-   14       --black: #000000;
-   15       --white: #ffffff;
-   16       --gray: #b3b3b3;
-   17       --gray-dim: #7c7a7a;
-   18       --purple-deep: #1a0d2e;
-   19       --purple-accent: #8b5cf6;
-   20       --border-dim: rgba(174,174,174,0.2);
-   21     }
-   22
-   23     html { scroll-behavior: smooth; }
-   24
-   25     body {
-   26       background: var(--black);
-   27       color: var(--white);
-   28       font-family: 'Inter', 'PingFang HK', sans-serif;
-   29       overflow-x: hidden;
-   30     }
-   31
-   32     /* ─── NAV ─── */
-   33     nav {
-   34       position: fixed;
-   35       top: 0; left: 0; right: 0;
-   36       display: flex;
-   37       align-items: center;
-   38       justify-content: space-between;
-   39       padding: 20px 48px;
-   40       background: rgba(0,0,0,0.85);
-   41       backdrop-filter: blur(12px);
-   42       border-bottom: 1px solid var(--border-dim);
-   43       z-index: 100;
-   44     }
-   45
-   46     .nav-logo {
-   47       display: flex; align-items: center; gap: 10px;
-   48       text-decoration: none; color: var(--white);
-   49       font-weight: 500; font-size: 16px;
-   50     }
-   51     .nav-logo img { width: 28px; border-radius: 8px; }
-   52
-   53     .btn-back {
-   54       display: inline-flex; align-items: center; gap: 6px;
-   55       text-decoration: none;
-   56       color: var(--gray);
-   57       font-size: 14px;
-   58       transition: color 0.2s;
-   59     }
-   60     .btn-back:hover { color: var(--white); }
-   61     .btn-back svg { width: 16px; height: 16px; }
-   62
-   63     /* ─── CONTENT ─── */
-   64     .page-wrap {
-   65       max-width: 720px;
-   66       margin: 0 auto;
-   67       padding: 140px 32px 80px;
-   68     }
-   69
-   70     .page-label {
-   71       font-size: 12px;
-   72       letter-spacing: 0.12em;
-   73       text-transform: uppercase;
-   74       color: var(--purple-accent);
-   75       margin-bottom: 16px;
-   76     }
-   77
-   78     h1 {
-   79       font-family: 'Playfair Display', serif;
-   80       font-size: clamp(32px, 5vw, 52px);
-   81       font-weight: 700;
-   82       line-height: 1.15;
-   83       margin-bottom: 12px;
-   84     }
-   85
-   86     .last-updated {
-   87       font-size: 13px;
-   88       color: var(--gray-dim);
-   89       margin-bottom: 56px;
-   90     }
-   91
-   92     .section {
-   93       margin-bottom: 48px;
-   94       padding-bottom: 48px;
-   95       border-bottom: 1px solid var(--border-dim);
-   96     }
-   97     .section:last-of-type { border-bottom: none; }
-   98
-   99     .section h2 {
-  100       font-size: 20px;
-  101       font-weight: 500;
-  102       margin-bottom: 16px;
-  103       color: var(--white);
-  104     }
-  105
-  106     .section p {
-  107       font-size: 15px;
-  108       line-height: 1.8;
-  109       color: var(--gray);
-  110       margin-bottom: 12px;
-  111     }
-  112     .section p:last-child { margin-bottom: 0; }
-  113
-  114     .section ul {
-  115       padding-left: 20px;
-  116       margin-top: 8px;
-  117     }
-  118     .section ul li {
-  119       font-size: 15px;
-  120       line-height: 1.8;
-  121       color: var(--gray);
-  122       margin-bottom: 6px;
-  123     }
-  124
-  125     .highlight-box {
-  126       background: rgba(139, 92, 246, 0.08);
-  127       border: 1px solid rgba(139, 92, 246, 0.25);
-  128       border-radius: 12px;
-  129       padding: 20px 24px;
-  130       margin-top: 24px;
-  131     }
-  132     .highlight-box p {
-  133       margin: 0;
-  134       color: rgba(255,255,255,0.8);
-  135     }
-  136
-  137     a.inline-link {
-  138       color: var(--purple-accent);
-  139       text-decoration: none;
-  140     }
-  141     a.inline-link:hover { text-decoration: underline; }
-  142
-  143     /* ─── FOOTER ─── */
-  144     footer {
-  145       display: flex;
-  146       align-items: center;
-  147       justify-content: space-between;
-  148       flex-wrap: wrap;
-  149       gap: 16px;
-  150       padding: 32px 48px;
-  151       border-top: 1px solid var(--border-dim);
-  152     }
-  153
-  154     .footer-logo {
-  155       display: flex; align-items: center; gap: 10px;
-  156       font-size: 15px; font-weight: 500;
-  157     }
-  158     .footer-logo img { width: 28px; border-radius: 8px; }
-  159
-  160     .footer-links {
-  161       list-style: none;
-  162       display: flex; gap: 28px;
-  163     }
-  164     .footer-links a {
-  165       color: var(--gray-dim);
-  166       text-decoration: none;
-  167       font-size: 13px;
-  168       transition: color 0.2s;
-  169     }
-  170     .footer-links a:hover { color: var(--white); }
-  171
-  172     .footer-copy {
-  173       font-size: 12px;
-  174       color: var(--gray-dim);
-  175     }
-  176
-  177     @media (max-width: 600px) {
-  178       nav { padding: 16px 24px; }
-  179       .page-wrap { padding: 120px 24px 60px; }
-  180       footer { flex-direction: column; gap: 20px; padding: 32px 24px; }
-  181     }
-  182   </style>
-  183 </head>
-  184 <body>
-  185
-  186 <!-- ─── NAV ─── -->
-  187 <nav>
-  188   <a href="index.html" class="nav-logo">
-  189     <img src="images/app-icon.png" alt="HueMood" />
-  190     HueMood
-  191   </a>
-  192   <a href="index.html" class="btn-back">
-  193     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
-      ="2" stroke-linecap="round" stroke-linejoin="round">
-  194       <polyline points="15 18 9 12 15 6"/>
-  195     </svg>
-  196     Back to Home
-  197   </a>
-  198 </nav>
-  199
-  200 <!-- ─── CONTENT ─── -->
-  201 <div class="page-wrap">
-  202
-  203   <p class="page-label">Legal</p>
-  204   <h1>Terms of Use</h1>
-  205   <p class="last-updated">Last updated: April 2026</p>
-  206
-  207   <div class="section">
-  208     <h2>Agreement to Terms</h2>
-  209     <p>By downloading or using HueMood ("the app"), you agree to be bound b
-      y these Terms of Use. If you do not agree to these terms, please do not use
-       the app.</p>
-  210   </div>
-  211
-  212   <div class="section">
-  213     <h2>Use of the App</h2>
-  214     <p>HueMood is a color extraction tool for iOS that allows you to pick c
-      olors from photos and save them to your personal color space. You may use t
-      he app for personal, non-commercial purposes in accordance with these terms
-      .</p>
-  215     <p>You agree not to:</p>
-  216     <ul>
-  217       <li>Reverse engineer, decompile, or disassemble the app</li>
-  218       <li>Use the app for any unlawful purpose</li>
-  219       <li>Attempt to gain unauthorized access to any part of the app</li>
-  220       <li>Remove or alter any proprietary notices or labels on the app</li>
-  221     </ul>
-  222   </div>
-  223
-  224   <div class="section">
-  225     <h2>Subscription & In-App Purchases</h2>
-  226     <p>HueMood offers an optional auto-renewable subscription — <strong sty
-      le="color:#fff">HueMood Pro</strong> — which unlocks unlimited color extrac
-      tions from your photo library.</p>
-  227     <div class="highlight-box">
-  228       <p>📋 Subscription details:<br/><br/>
-  229       • <strong>Plan:</strong> HueMood Pro — Monthly<br/>
-  230       • <strong>Price:</strong> ¥6.00 / month (price may vary by region)<br
-      />
-  231       • <strong>Billing:</strong> Automatically renewed each month unless c
-      ancelled<br/>
-  232       • <strong>Free usage:</strong> 3 free extractions included without su
-      bscription<br/>
-  233       • <strong>Cancellation:</strong> Cancel anytime in iPhone Settings →
-      Apple ID → Subscriptions<br/>
-  234       • <strong>Renewal:</strong> Your Apple ID will be charged within 24 h
-      ours before the end of each period<br/>
-  235       • <strong>Trial:</strong> If a free trial is offered, unused portions
-       are forfeited upon purchase
-  236       </p>
-  237     </div>
-  238     <p style="margin-top:20px">All purchases are processed by Apple through
-       the App Store. We do not have access to your payment information. For refu
-      nd requests, please contact Apple Support.</p>
-  239   </div>
-  240
-  241   <div class="section">
-  242     <h2>Intellectual Property</h2>
-  243     <p>The app, including its design, graphics, code, and content, is owned
-       by the developer and protected by applicable intellectual property laws. Y
-      ou are granted a limited, non-exclusive, non-transferable license to use th
-      e app on your Apple devices.</p>
-  244     <p>Color palettes and artworks you create or save within the app remain
-       your own. We claim no ownership over your personal creative work.</p>
-  245   </div>
-  246
-  247   <div class="section">
-  248     <h2>Third-Party Content</h2>
-  249     <p>HueMood may display artwork images sourced from Unsplash under their
-       open license. These images are provided for inspiration and color referenc
-      e purposes only. All original copyright belongs to the respective photograp
-      hers.</p>
-  250   </div>
-  251
-  252   <div class="section">
-  253     <h2>Disclaimer of Warranties</h2>
-  254     <p>The app is provided "as is" without warranties of any kind, either e
-      xpress or implied. We do not warrant that the app will be uninterrupted, er
-      ror-free, or free of viruses or other harmful components.</p>
-  255   </div>
-  256
-  257   <div class="section">
-  258     <h2>Limitation of Liability</h2>
-  259     <p>To the fullest extent permitted by law, we shall not be liable for a
-      ny indirect, incidental, special, or consequential damages arising from you
-      r use of or inability to use the app, even if we have been advised of the p
-      ossibility of such damages.</p>
-  260   </div>
-  261
-  262   <div class="section">
-  263     <h2>Changes to These Terms</h2>
-  264     <p>We reserve the right to modify these Terms of Use at any time. We wi
-      ll update the "Last updated" date when changes are made. Continued use of t
-      he app after any changes constitutes your acceptance of the new terms.</p>
-  265   </div>
-  266
-  267   <div class="section">
-  268     <h2>Governing Law</h2>
-  269     <p>These Terms of Use shall be governed by and construed in accordance
-      with the laws of the People's Republic of China, without regard to its conf
-      lict of law provisions.</p>
-  270   </div>
-  271
-  272   <div class="section">
-  273     <h2>Contact Us</h2>
-  274     <p>If you have any questions about these Terms of Use, please contact u
-      s at:</p>
-  275     <p><a class="inline-link" href="mailto:eremecmepap@mail.com">eremecmepa
-      p@mail.com</a></p>
-  276   </div>
-  277
-  278 </div>
-  279
-  280 <!-- ─── FOOTER ─── -->
-  281 <footer>
-  282   <div class="footer-logo">
-  283     <img src="images/app-icon.png" alt="HueMood" />
-  284     HueMood
-  285   </div>
-  286   <ul class="footer-links">
-  287     <li><a href="privacy.html">Privacy Policy</a></li>
-  288     <li><a href="terms.html">Terms of Use</a></li>
-  289     <li><a href="index.html#contact">Contact</a></li>
-  290   </ul>
-  291   <span class="footer-copy">© 2026 HueMood. Made for creators.</span>
-  292 </footer>
-  293
-  294 </body>
-  295 </html>
-╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+  <!DOCTYPE html>                                                                                                       
+  <html lang="en">
+  <head>                                                                                                                
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms of Use — HueMood</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />                                                       
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&dis
+  play=swap" rel="stylesheet" />                                                                                        
+    <style>                                                                                                             
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }                                         
+      :root {                                                                                                           
+        --black: #000000; --white: #ffffff; --gray: #b3b3b3; --gray-dim: #7c7a7a;
+        --purple-accent: #8b5cf6; --border-dim: rgba(174,174,174,0.2);                                                  
+      }                                                                                                                 
+      html { scroll-behavior: smooth; }                                                                                 
+      body { background: var(--black); color: var(--white); font-family: 'Inter', 'PingFang HK', sans-serif; overflow-x:
+   hidden; }                                                                                                            
+      nav { position: fixed; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content:
+  space-between; padding: 20px 48px; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid
+   var(--border-dim); z-index: 100; }
+      .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--white);            
+  font-weight: 500; font-size: 16px; }                                                                                  
+      .nav-logo img { width: 28px; border-radius: 8px; }
+      .btn-back { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--gray);       
+  font-size: 14px; transition: color 0.2s; }                                                                            
+      .btn-back:hover { color: var(--white); }
+      .btn-back svg { width: 16px; height: 16px; }                                                                      
+      .page-wrap { max-width: 720px; margin: 0 auto; padding: 140px 32px 80px; }                                        
+      .page-label { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--purple-accent);
+  margin-bottom: 16px; }                                                                                                
+      h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 700; line-height:
+  1.15; margin-bottom: 12px; }                                                                                          
+      .last-updated { font-size: 13px; color: var(--gray-dim); margin-bottom: 56px; }
+      .section { margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border-dim); }               
+      .section:last-of-type { border-bottom: none; }                                                                    
+      .section h2 { font-size: 20px; font-weight: 500; margin-bottom: 16px; color: var(--white); }                      
+      .section p { font-size: 15px; line-height: 1.8; color: var(--gray); margin-bottom: 12px; }                        
+      .section p:last-child { margin-bottom: 0; }                                                                       
+      .section ul { padding-left: 20px; margin-top: 8px; }                                                              
+      .section ul li { font-size: 15px; line-height: 1.8; color: var(--gray); margin-bottom: 6px; }                     
+      .highlight-box { background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px;
+  padding: 20px 24px; margin-top: 24px; }                                                                               
+      .highlight-box p { margin: 0; color: rgba(255,255,255,0.8); }
+      a.inline-link { color: var(--purple-accent); text-decoration: none; }                                             
+      a.inline-link:hover { text-decoration: underline; }                                                               
+      footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 
+  32px 48px; border-top: 1px solid var(--border-dim); }                                                                 
+      .footer-logo { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; }
+      .footer-logo img { width: 28px; border-radius: 8px; }                                                             
+      .footer-links { list-style: none; display: flex; gap: 28px; }                                                     
+      .footer-links a { color: var(--gray-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }       
+      .footer-links a:hover { color: var(--white); }                                                                    
+      .footer-copy { font-size: 12px; color: var(--gray-dim); }
+      @media (max-width: 600px) { nav { padding: 16px 24px; } .page-wrap { padding: 120px 24px 60px; } footer {         
+  flex-direction: column; gap: 20px; padding: 32px 24px; } }                                                            
+    </style>                                                                                                            
+  </head>                                                                                                               
+  <body>          
+  <nav>                                                                                                                 
+    <a href="index.html" class="nav-logo">
+      <img src="images/app-icon.png" alt="HueMood" />                                                                   
+      HueMood     
+    </a>                                                                                                                
+    <a href="index.html" class="btn-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"                
+  stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>                                                    
+      Back to Home
+    </a>                                                                                                                
+  </nav>          
+  <div class="page-wrap">                                                                                               
+    <p class="page-label">Legal</p>
+    <h1>Terms of Use</h1>                                                                                               
+    <p class="last-updated">Last updated: April 2026</p>
+    <div class="section">                                                                                               
+      <h2>Agreement to Terms</h2>
+      <p>By downloading or using HueMood ("the app"), you agree to be bound by these Terms of Use. If you do not agree  
+  to these terms, please do not use the app.</p>                                                                        
+    </div>
+    <div class="section">                                                                                               
+      <h2>Use of the App</h2>
+      <p>HueMood is a color extraction tool for iOS that allows you to pick colors from photos and save them to your    
+  personal color space. You may use the app for personal, non-commercial purposes in accordance with these terms.</p>   
+      <p>You agree not to:</p>                                                                                          
+      <ul>                                                                                                              
+        <li>Reverse engineer, decompile, or disassemble the app</li>                                                    
+        <li>Use the app for any unlawful purpose</li>
+        <li>Attempt to gain unauthorized access to any part of the app</li>                                             
+        <li>Remove or alter any proprietary notices or labels on the app</li>                                           
+      </ul>
+    </div>                                                                                                              
+    <div class="section">
+      <h2>Subscription &amp; In-App Purchases</h2>                                                                      
+      <p>HueMood offers an optional auto-renewable subscription — <strong style="color:#fff">HueMood Pro</strong> —
+  which unlocks unlimited color extractions from your photo library.</p>                                                
+      <div class="highlight-box">
+        <p>Subscription details:<br/><br/>                                                                              
+        • <strong>Plan:</strong> HueMood Pro — Monthly<br/>                                                             
+        • <strong>Price:</strong> ¥6.00 / month<br/>
+        • <strong>Billing:</strong> Automatically renewed each month unless cancelled<br/>                              
+        • <strong>Free usage:</strong> 3 free extractions included without subscription<br/>                            
+        • <strong>Cancellation:</strong> Cancel anytime in iPhone Settings → Apple ID → Subscriptions<br/>              
+        • <strong>Renewal:</strong> Your Apple ID will be charged within 24 hours before the end of each period         
+        </p>                                                                                                            
+      </div>                                                                                                            
+      <p style="margin-top:20px">All purchases are processed by Apple through the App Store. We do not have access to   
+  your payment information.</p>                                                                                         
+    </div>        
+    <div class="section">                                                                                               
+      <h2>Intellectual Property</h2>
+      <p>The app, including its design, graphics, code, and content, is owned by the developer and protected by         
+  applicable intellectual property laws. You are granted a limited, non-exclusive, non-transferable license to use the  
+  app on your Apple devices.</p>                                                                                        
+      <p>Color palettes you create or save within the app remain your own. We claim no ownership over your personal     
+  creative work.</p>                                                                                                    
+    </div>
+    <div class="section">                                                                                               
+      <h2>Third-Party Content</h2>                                                                                      
+      <p>HueMood may display artwork images sourced from Unsplash under their open license. These images are provided
+  for inspiration and color reference purposes only.</p>                                                                
+    </div>        
+    <div class="section">                                                                                               
+      <h2>Disclaimer of Warranties</h2>
+      <p>The app is provided "as is" without warranties of any kind, either express or implied.</p>                     
+    </div>
+    <div class="section">                                                                                               
+      <h2>Limitation of Liability</h2>
+      <p>To the fullest extent permitted by law, we shall not be liable for any indirect, incidental, special, or       
+  consequential damages arising from your use of the app.</p>
+    </div>                                                                                                              
+    <div class="section">
+      <h2>Changes to These Terms</h2>                                                                                   
+      <p>We reserve the right to modify these Terms of Use at any time. Continued use of the app after changes
+  constitutes your acceptance of the updated terms.</p>                                                                 
+    </div>        
+    <div class="section">                                                                                               
+      <h2>Governing Law</h2>
+      <p>These Terms of Use shall be governed by the laws of the People's Republic of China.</p>
+    </div>                                                                                                              
+    <div class="section">
+      <h2>Contact Us</h2>                                                                                               
+      <p>If you have any questions, please contact us at: <a class="inline-link" 
+  href="mailto:eremecmepap@mail.com">eremecmepap@mail.com</a></p>                                                       
+    </div>
+  </div>                                                                                                                
+  <footer>        
+    <div class="footer-logo">                                                                                           
+      <img src="images/app-icon.png" alt="HueMood" />
+      HueMood                                                                                                           
+    </div>        
+    <ul class="footer-links">
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html">Terms of Use</a></li>                                                                    
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>                                                                                                               
+    <span class="footer-copy">© 2026 HueMood. Made for creators.</span>
+  </footer>                                                                                                             
+  </body>                                                                                                               
+  </html>
