@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HueDiary — How do you feel today?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Inter:wght@400;500&family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper: #f4ede0;
+      --paper-dark: #ebe2d0;
+      --dot: #d4cdb7;
+      --ink: #2c2724;
+      --ink-soft: #5a544c;
+      --note-yellow: #fbeec0;
+      --note-yellow-tape: #b9d6e8;
+      --note-blue: #cce8e6;
+      --note-blue-tape: #f3c6dc;
+      --circle-purple: #9580d8;
+      --star-orange: #f0a042;
+      --star-yellow: #f5d04a;
+      --hash-red: #e85d5d;
+      --bar-shadow: 0 6px 30px rgba(60, 50, 30, 0.08), 0 2px 8px rgba(60, 50, 30, 0.05);
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      background: var(--paper);
+      background-image:
+        radial-gradient(circle, var(--dot) 1.2px, transparent 1.6px);
+      background-size: 22px 22px;
+      color: var(--ink);
+      font-family: 'Inter', 'PingFang HK', sans-serif;
+      cursor: none;
+      position: relative;
+    }
+
+    /* ─── 自定义鼠标指针 ─── */
+    .cursor-dot, .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+    .cursor-dot {
+      width: 6px; height: 6px;
+      background: var(--ink);
+      border-radius: 50%;
+      transition: width 0.2s, height 0.2s, background 0.2s;
+    }
+    .cursor-ring {
+      width: 32px; height: 32px;
+      border: 1.5px solid var(--ink);
+      border-radius: 50%;
+      transition: width 0.25s, height 0.25s, border-color 0.25s, background 0.25s;
+    }
+    .cursor-ring.hover-cat {
+      width: 64px; height: 64px;
+      background: rgba(149, 128, 216, 0.12);
+      border-color: var(--circle-purple);
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 56px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .nav-logo img {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(60, 50, 30, 0.12);
+    }
+    .nav-logo .name {
+      font-family: 'Caveat', cursive;
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 44px;
+    }
+    .nav-links a {
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -4px;
+      height: 2px;
+      background: var(--ink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s;
+    }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 40px;
+    }
+
+    /* 中央标题区 */
+    .hero-center {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+      transform: translateY(-20px);
+    }
+    .hero-bg-cat {
+      --bg-size: min(1350px, 92vh, 95vw);
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      width: var(--bg-size);
+      height: var(--bg-size);
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero-bg-cat.show {
+      opacity: 0.75;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .hero-title-1 {
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: 200px;
+      line-height: 0.95;
+      color: var(--ink);
+      letter-spacing: -2px;
+      position: relative;
+      z-index: 2;
+      user-select: none;
+    }
+    .hero-title-2 {
+      font-family: 'Caveat', cursive;
+      font-weight: 400;
+      font-size: 76px;
+      line-height: 1;
+      color: var(--ink-soft);
+      margin-top: -12px;
+      position: relative;
+      z-index: 2;
+      user-select: none;
+    }
+
+    /* ─── 装饰贴纸 ─── */
+    .sticker {
+      position: absolute;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* 左上：紫色圆圈装饰 */
+    .sticker-circles {
+      top: 30%; left: 6%;
+      width: 110px; height: 130px;
+    }
+    .sticker-circles .c1 {
+      position: absolute; top: 0; left: 28px;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--circle-purple);
+    }
+    .sticker-circles .c2 {
+      position: absolute; top: 38px; left: 0;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 3px solid var(--circle-purple);
+    }
+
+    /* 左侧：黄色便利贴 */
+    .sticker-paper {
+      top: 56%; left: 4%;
+      width: 230px; height: 165px;
+      background: var(--note-yellow);
+      transform: rotate(-3deg);
+      box-shadow: 0 6px 18px rgba(60, 50, 30, 0.1);
+      border-bottom-right-radius: 8px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 22px;
+    }
+    .sticker-paper::after {
+      /* 撕痕底边 */
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 12px;
+      background:
+        radial-gradient(circle at 8% 100%, transparent 5px, var(--note-yellow) 5.5px) 0 0/16px 100%;
+    }
+    .sticker-paper-tape {
+      position: absolute;
+      top: 50%; left: 70%;
+      transform: translate(-50%, -50%) rotate(-12deg);
+      width: 90px; height: 24px;
+      background: var(--note-yellow-tape);
+      opacity: 0.85;
+    }
+    .sticker-paper-wrap {
+      position: absolute;
+      top: 56%; left: 4%;
+      width: 230px; height: 180px;
+      pointer-events: none;
+    }
+    .sticker-paper-wrap .sticker-paper {
+      position: absolute;
+      top: 18px; left: 0;
+      transform: rotate(-3deg);
+    }
+    .sticker-paper-wrap .sticker-paper-tape {
+      position: absolute;
+      top: 4px; left: 80%;
+      transform: translate(-50%, 0) rotate(-12deg);
+    }
+
+    /* 右上：星星装饰 */
+    .sticker-stars {
+      top: 25%; right: 6%;
+      width: 120px; height: 120px;
+    }
+    .sticker-stars svg {
+      position: absolute;
+      width: 100%; height: 100%;
+    }
+
+    /* 右侧：蓝色便签（空白） */
+    .sticker-todo-wrap {
+      position: absolute;
+      top: 60%; right: 4%;
+      width: 200px; height: 220px;
+      pointer-events: none;
+    }
+    .sticker-todo {
+      position: absolute;
+      top: 16px; left: 0;
+      width: 200px; height: 200px;
+      background: var(--note-blue);
+      transform: rotate(4deg);
+      box-shadow: 0 6px 18px rgba(60, 50, 30, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+    }
+    .sticker-text {
+      font-family: 'Caveat', cursive;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--ink);
+      text-align: center;
+      line-height: 1.25;
+    }
+    .sticker-todo-tape {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translate(-50%, 0) rotate(-3deg);
+      width: 90px; height: 22px;
+      background: var(--note-blue-tape);
+      opacity: 0.85;
+    }
+
+    /* 左下：井号 # */
+    .sticker-hash {
+      bottom: 22%; left: 28%;
+      font-family: 'Caveat', cursive;
+      font-size: 64px;
+      font-weight: 700;
+      color: var(--hash-red);
+      transform: rotate(-8deg);
+    }
+
+    /* ─── 下载按钮（参考 Freenotes 白底胶囊样式） ─── */
+    .download-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 32px;
+      position: relative;
+      z-index: 2;
+    }
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 22px;
+      background: #ffffff;
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--ink);
+      box-shadow: 0 4px 14px rgba(60, 50, 30, 0.08);
+      transition: transform 0.25s cubic-bezier(.22,1,.36,1), box-shadow 0.25s;
+    }
+    .dl-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(60, 50, 30, 0.16);
+    }
+    .dl-icon {
+      width: 28px; height: 28px;
+      flex-shrink: 0;
+    }
+    .dl-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+      font-family: 'Inter', sans-serif;
+    }
+    .dl-tiny {
+      font-size: 9px;
+      opacity: 0.7;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+      font-weight: 500;
+    }
+    .dl-big {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    /* ─── 猫猫工具栏 ─── */
+    .cat-bar-wrap {
+      position: relative;
+      width: 90vw;
+      max-width: 520px;
+      margin-top: 94px;
+      z-index: 3;
+    }
+    .cat-bar {
+      width: 100%;
+      background: #ffffff;
+      border-radius: 100px;
+      padding: 5px 28px;
+      box-shadow: var(--bar-shadow);
+      overflow: hidden;
+      position: relative;
+      cursor: grab;
+    }
+    .cat-bar.dragging { cursor: grabbing; }
+    .cat-bar::before, .cat-bar::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 40px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .cat-bar::before {
+      left: 0;
+      background: linear-gradient(to right, #fff, transparent);
+      border-radius: 100px 0 0 100px;
+    }
+    .cat-bar::after {
+      right: 0;
+      background: linear-gradient(to left, #fff, transparent);
+      border-radius: 0 100px 100px 0;
+    }
+    .cat-track {
+      display: flex;
+      gap: 20px;
+      transition: transform 0.4s cubic-bezier(.22,1,.36,1);
+      will-change: transform;
+    }
+    .cat-track.snapping { transition: transform 0.4s cubic-bezier(.22,1,.36,1); }
+    .cat-track.dragging { transition: none; }
+    .cat-item {
+      flex-shrink: 0;
+      width: 60px; height: 60px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.3s cubic-bezier(.22,1,.36,1);
+    }
+    .cat-item img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .cat-item:hover { transform: scale(1.5) translateY(-8px); }
+    .cat-item.selected {
+      transform: scale(1.1) translateY(-3px);
+    }
+
+    /* 拖拽提示 */
+    .drag-hint {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--ink-soft);
+      opacity: 0.6;
+      letter-spacing: 1px;
+      font-family: 'Caveat', cursive;
+      font-size: 18px;
+    }
+
+    /* ─── FOOTER 备案号 ─── */
+    footer {
+      position: fixed;
+      bottom: 12px; left: 0; right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink-soft);
+      opacity: 0.7;
+      z-index: 50;
+    }
+    footer a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--ink); }
+
+    /* ─── 响应式（mobile 简单容下） ─── */
+    @media (max-width: 900px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      nav { padding: 16px 20px; }
+      .nav-logo .name { font-size: 26px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
+      .hero-title-1 { font-size: 100px; }
+      .hero-title-2 { font-size: 40px; }
+      .hero-bg-cat { width: 280px; height: 280px; }
+      .sticker-circles, .sticker-paper-wrap, .sticker-stars, .sticker-todo-wrap, .sticker-hash { display: none; }
+      .cat-item { width: 72px; height: 72px; }
+      .cat-bar { padding: 16px 28px; }
+      .cat-track { gap: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 自定义指针 -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="images/huediary/logo.png" alt="HueDiary" />
+    <span class="name">HueDiary</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="huediary-privacy.html">Privacy Policy</a></li>
+    <li><a href="huediary-terms.html">User Agreement</a></li>
+    <li><a href="mailto:zhaopf095@gmail.com">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<main class="hero">
+
+  <!-- 装饰：左上紫色圆圈 -->
+  <div class="sticker sticker-circles">
+    <span class="c1"></span>
+    <span class="c2"></span>
+  </div>
+
+  <!-- 装饰：左侧黄色便利贴 -->
+  <div class="sticker-paper-wrap">
+    <div class="sticker sticker-paper">
+      <span class="sticker-text">feeling so happy today!</span>
+    </div>
+    <div class="sticker sticker-paper-tape"></div>
+  </div>
+
+  <!-- 装饰：右上星星 -->
+  <div class="sticker sticker-stars">
+    <svg viewBox="0 0 120 120" fill="none">
+      <!-- 4 角橘色大星 -->
+      <path d="M85 30 L88 50 L108 53 L88 56 L85 76 L82 56 L62 53 L82 50 Z" fill="#f0a042"/>
+      <!-- 小黄星 -->
+      <path d="M40 64 L42 76 L54 78 L42 80 L40 92 L38 80 L26 78 L38 76 Z" fill="#f5d04a"/>
+      <!-- 加号 -->
+      <path d="M100 14 L100 26 M94 20 L106 20" stroke="#f0a042" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- 装饰：右侧蓝色便签 -->
+  <div class="sticker-todo-wrap">
+    <div class="sticker sticker-todo">
+      <span class="sticker-text">not in the mood today,<br/>just want some quiet time ~</span>
+    </div>
+    <div class="sticker sticker-todo-tape"></div>
+  </div>
+
+  <!-- 装饰：左下井号 -->
+  <div class="sticker sticker-hash">#</div>
+
+  <!-- 中央标题 -->
+  <div class="hero-center">
+    <img class="hero-bg-cat" id="bgCat" alt="" />
+    <h1 class="hero-title-1">Today</h1>
+    <h2 class="hero-title-2">how do you feel?</h2>
+    <div class="download-row">
+      <a href="#" class="dl-btn">
+        <svg class="dl-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.05,20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24,0-1.44.62-2.2.44-3.06-.35C2.79,15.25,3.51,7.59,9.05,7.31c1.35.07,2.29.74,3.08.8,1.18-.24,2.31-.93,3.57-.84,1.51.12,2.65.72,3.4,1.8-3.12,1.87-2.38,5.98.48,7.13-.57,1.5-1.31,2.99-2.54,4.09ZM12.03,7.25c-.15-2.23,1.66-4.07,3.74-4.25.29,2.58-2.34,4.5-3.74,4.25Z"/>
+        </svg>
+        <span class="dl-text">
+          <span class="dl-tiny">Download on the</span>
+          <span class="dl-big">App Store</span>
+        </span>
+      </a>
+      <a href="#" class="dl-btn">
+        <svg class="dl-icon" viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="g-blue" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#00C7FF"/><stop offset="1" stop-color="#00B0FF"/>
+            </linearGradient>
+            <linearGradient id="g-yellow" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#FFD200"/><stop offset="1" stop-color="#FFA000"/>
+            </linearGradient>
+            <linearGradient id="g-red" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#FF3D47"/><stop offset="1" stop-color="#E91E63"/>
+            </linearGradient>
+            <linearGradient id="g-green" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#00E676"/><stop offset="1" stop-color="#00C853"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#g-blue)"   d="M3.6,2.3C3.2,2.6,3,3.1,3,3.8v16.4c0,.7.2,1.2.6,1.5L13.1,12 3.6,2.3Z"/>
+          <path fill="url(#g-yellow)" d="M16.7,8.4 13.1,12l3.6,3.6 3.7-2.1c1.1-.6,1.1-1.9,0-2.5L16.7,8.4Z"/>
+          <path fill="url(#g-red)"    d="M3.6,21.7c.4.3,1,.4,1.7,0l11.4-6.5L13.1,12 3.6,21.7Z"/>
+          <path fill="url(#g-green)"  d="M3.6,2.3 13.1,12l3.6-3.6L5.3,2.3c-.7-.4-1.3-.3-1.7,0Z"/>
+        </svg>
+        <span class="dl-text">
+          <span class="dl-tiny">Get it on</span>
+          <span class="dl-big">Google Play</span>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 猫猫工具栏 -->
+  <div class="cat-bar-wrap">
+    <div class="cat-bar" id="catBar">
+      <div class="cat-track" id="catTrack">
+        <div class="cat-item" data-mood="0"><img src="images/huediary/mood_cat_0.png" alt="" /></div>
+        <div class="cat-item" data-mood="1"><img src="images/huediary/mood_cat_1.png" alt="" /></div>
+        <div class="cat-item" data-mood="2"><img src="images/huediary/mood_cat_2.png" alt="" /></div>
+        <div class="cat-item" data-mood="3"><img src="images/huediary/mood_cat_3.png" alt="" /></div>
+        <div class="cat-item" data-mood="4"><img src="images/huediary/mood_cat_4.png" alt="" /></div>
+        <div class="cat-item" data-mood="5"><img src="images/huediary/mood_cat_5.png" alt="" /></div>
+        <div class="cat-item" data-mood="6"><img src="images/huediary/mood_cat_6.png" alt="" /></div>
+        <div class="cat-item" data-mood="7"><img src="images/huediary/mood_cat_7.png" alt="" /></div>
+        <div class="cat-item" data-mood="8"><img src="images/huediary/mood_cat_8.png" alt="" /></div>
+        <div class="cat-item" data-mood="9"><img src="images/huediary/mood_cat_9.png" alt="" /></div>
+      </div>
+    </div>
+    <p class="drag-hint">← drag to see more →</p>
+  </div>
+
+</main>
+
+<!-- 备案号 footer -->
+<footer>
+  © 2026 HueDiary &nbsp;·&nbsp;
+  <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">粤ICP备2026050406号-1</a>
+</footer>
+
+<script>
+  // ─── 自定义鼠标指针 ───
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  window.addEventListener('mousemove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+  });
+  // ring 用 RAF 缓动跟随
+  function animateRing() {
+    rx += (mx - rx) * 0.15;
+    ry += (my - ry) * 0.15;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // ─── 猫猫点击：设置背景 ───
+  const bgCat = document.getElementById('bgCat');
+  const catItems = document.querySelectorAll('.cat-item');
+  let dragging = false, dragStartX = 0, dragStartTx = 0, currentTx = 0, didDrag = false;
+  const track = document.getElementById('catTrack');
+  const bar = document.getElementById('catBar');
+
+  catItems.forEach((item) => {
+    item.addEventListener('mouseenter', () => ring.classList.add('hover-cat'));
+    item.addEventListener('mouseleave', () => ring.classList.remove('hover-cat'));
+    item.addEventListener('click', (e) => {
+      // 防止拖拽误触发点击
+      if (didDrag) { didDrag = false; return; }
+      catItems.forEach(i => i.classList.remove('selected'));
+      item.classList.add('selected');
+      const mood = item.dataset.mood;
+      const img = item.querySelector('img');
+      bgCat.src = img.src;
+      bgCat.classList.add('show');
+    });
+  });
+
+  // ─── 横向拖拽 ───
+  function clampTx(tx) {
+    // 计算 track 实际宽度 vs 容器宽度，限制拖拽范围
+    const barWidth = bar.clientWidth - 88;          // 减 padding
+    const trackWidth = track.scrollWidth;
+    const minTx = Math.min(0, barWidth - trackWidth);
+    return Math.max(minTx, Math.min(0, tx));
+  }
+
+  bar.addEventListener('mousedown', (e) => {
+    dragging = true;
+    didDrag = false;
+    dragStartX = e.clientX;
+    dragStartTx = currentTx;
+    bar.classList.add('dragging');
+    track.classList.add('dragging');
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - dragStartX;
+    if (Math.abs(dx) > 5) didDrag = true;
+    currentTx = clampTx(dragStartTx + dx);
+    track.style.transform = `translateX(${currentTx}px)`;
+  });
+  window.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    bar.classList.remove('dragging');
+    track.classList.remove('dragging');
+  });
+
+  // ─── 滚轮也能横向滑（macOS 双指） ───
+  bar.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      e.preventDefault();
+      currentTx = clampTx(currentTx - e.deltaX);
+      track.style.transform = `translateX(${currentTx}px)`;
+    }
+  }, { passive: false });
+
+  // ─── 触摸支持（mobile） ───
+  let touchStartX = 0, touchStartTx = 0;
+  bar.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartTx = currentTx;
+    track.classList.add('dragging');
+  });
+  bar.addEventListener('touchmove', (e) => {
+    const dx = e.touches[0].clientX - touchStartX;
+    currentTx = clampTx(touchStartTx + dx);
+    track.style.transform = `translateX(${currentTx}px)`;
+  });
+  bar.addEventListener('touchend', () => {
+    track.classList.remove('dragging');
+  });
+</script>
+
+</body>
+</html>

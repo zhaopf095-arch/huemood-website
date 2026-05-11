@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Agreement — HueDiary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper: #f4ede0;
+      --dot: #d4cdb7;
+      --ink: #2c2724;
+      --ink-soft: #5a544c;
+      --accent: #9580d8;
+      --border-dim: rgba(60, 50, 30, 0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      background-image: radial-gradient(circle, var(--dot) 1.2px, transparent 1.6px);
+      background-size: 22px 22px;
+      color: var(--ink);
+      font-family: 'Inter', 'PingFang HK', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 56px;
+      background: rgba(244, 237, 224, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-dim);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .nav-logo img {
+      width: 40px; height: 40px;
+      border-radius: 9px;
+      box-shadow: 0 2px 8px rgba(60, 50, 30, 0.12);
+    }
+    .nav-logo .name {
+      font-family: 'Caveat', cursive;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 36px;
+    }
+    .nav-links a {
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a.active { color: var(--accent); }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -4px;
+      height: 2px;
+      background: var(--ink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s;
+    }
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      transform: scaleX(1);
+      background: var(--accent);
+    }
+
+    /* ─── PAGE CONTENT ─── */
+    .page-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 130px 32px 100px;
+    }
+
+    .page-label {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(56px, 8vw, 84px);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 14px;
+      color: var(--ink);
+    }
+
+    .last-updated {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-bottom: 56px;
+    }
+
+    .section {
+      margin-bottom: 44px;
+      padding-bottom: 44px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+    .section:last-of-type {
+      border-bottom: none;
+    }
+
+    .section h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      color: var(--ink);
+      letter-spacing: 0.3px;
+    }
+
+    .section p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+
+    .section ul {
+      padding-left: 22px;
+      margin: 10px 0;
+    }
+    .section ul li {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .highlight {
+      background: rgba(149, 128, 216, 0.1);
+      border: 1px solid rgba(149, 128, 216, 0.3);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 18px 0 6px;
+    }
+    .highlight p { margin: 0; color: var(--ink); }
+
+    a.inline-link {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(149, 128, 216, 0.4);
+      transition: border-color 0.2s;
+    }
+    a.inline-link:hover { border-bottom-color: var(--accent); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 32px 56px;
+      border-top: 1px solid var(--border-dim);
+    }
+    .footer-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Caveat', cursive;
+      font-size: 22px;
+      font-weight: 600;
+    }
+    .footer-logo img { width: 28px; border-radius: 7px; }
+    .footer-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+    .footer-meta a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-meta a:hover { color: var(--ink); }
+
+    @media (max-width: 700px) {
+      nav { padding: 16px 20px; }
+      .nav-logo .name { font-size: 24px; }
+      .nav-links { gap: 14px; }
+      .nav-links a { font-size: 12px; }
+      .page-wrap { padding: 110px 22px 70px; }
+      footer { flex-direction: column; gap: 16px; padding: 28px 22px; }
+      .footer-meta { align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="huediary.html" class="nav-logo">
+    <img src="images/huediary/logo.png" alt="HueDiary" />
+    <span class="name">HueDiary</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="huediary-privacy.html">Privacy Policy</a></li>
+    <li><a href="huediary-terms.html" class="active">User Agreement</a></li>
+    <li><a href="mailto:zhaopf095@gmail.com">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ─── CONTENT ─── -->
+<div class="page-wrap">
+
+  <p class="page-label">Legal</p>
+  <h1>User Agreement</h1>
+  <p class="last-updated">Last updated: May 11, 2026</p>
+
+  <div class="section">
+    <h2>Agreement to Terms</h2>
+    <p>By downloading, installing, or using HueDiary ("the app"), you agree to be bound by this User Agreement. If you do not agree to these terms, please do not use the app.</p>
+    <p>This agreement constitutes a legally binding agreement between you and the HueDiary team regarding your use of the app.</p>
+  </div>
+
+  <div class="section">
+    <h2>Use of the App</h2>
+    <p>HueDiary is a personal mood journaling app. We grant you a limited, non-exclusive, non-transferable, revocable license to use HueDiary on iOS devices that you own or control, solely for your personal, non-commercial purposes.</p>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Reverse-engineer, decompile, or disassemble the app</li>
+      <li>Modify, adapt, or create derivative works of the app</li>
+      <li>Redistribute, sublicense, sell, or rent the app or any part of it</li>
+      <li>Use the app for any unlawful purpose or in violation of any applicable laws</li>
+      <li>Attempt to bypass any technical protection or authentication in the app</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Subscriptions</h2>
+    <p>HueDiary offers an optional auto-renewing subscription with the following terms:</p>
+    <ul>
+      <li><strong>Plan:</strong> Monthly subscription at the price shown in the app at the time of purchase (regional pricing applies)</li>
+      <li><strong>Free trial:</strong> A complimentary trial period is offered to new subscribers, as displayed on the subscription screen</li>
+      <li><strong>Auto-renewal:</strong> Your subscription automatically renews at the end of each billing period unless you cancel at least 24 hours before the period ends</li>
+      <li><strong>Payment:</strong> Charges are billed to your Apple ID account at confirmation of purchase and at each renewal</li>
+    </ul>
+    <div class="highlight">
+      <p>You can manage and cancel your subscription anytime from your iPhone's <strong>Settings → [Your Name] → Subscriptions</strong>. Cancellation takes effect at the end of the current billing period; no refund is issued for the unused portion of the period unless required by law.</p>
+    </div>
+    <p>All subscription billing is processed by Apple. We do not handle, see, or store your payment details.</p>
+  </div>
+
+  <div class="section">
+    <h2>Your Content</h2>
+    <p>HueDiary stores your mood records and journal notes locally on your device. You retain full ownership of all content you create in the app. We claim no rights to your personal entries, mood data, or any expression you create through the app.</p>
+    <p>Because your data is stored locally, you are responsible for backing it up if desired (e.g., through iCloud Backup or device backup). Loss of data due to device failure, app deletion, or iOS reinstallation is not the responsibility of the HueDiary team.</p>
+  </div>
+
+  <div class="section">
+    <h2>Care Email Feature</h2>
+    <p>HueDiary includes an optional feature that helps you reach a trusted contact during periods of low mood. By enabling and using this feature, you acknowledge that:</p>
+    <ul>
+      <li>You are solely responsible for the contact email address you enter</li>
+      <li>The email is composed and sent through iOS's native mail composer, by your action — not by HueDiary</li>
+      <li>HueDiary is not a medical, mental health, or emergency service. If you are in crisis or experiencing a mental health emergency, please contact a qualified professional or emergency services in your country immediately</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Not a Medical or Mental Health Service</h2>
+    <p>HueDiary is a personal journaling tool intended for self-reflection and casual emotional tracking. It is <strong>not</strong> a substitute for professional medical, psychological, or psychiatric advice, diagnosis, or treatment. Always consult a qualified healthcare provider with any questions you may have regarding a mental health condition.</p>
+  </div>
+
+  <div class="section">
+    <h2>Intellectual Property</h2>
+    <p>The HueDiary app — including its name, logo, illustrations (mood cats, decorative elements), interface design, source code, and original artwork — is owned by the HueDiary team and is protected by copyright and other intellectual property laws.</p>
+    <p>This User Agreement does not grant you any right to use the HueDiary trademarks, logos, or copyrighted materials except as strictly necessary to use the app.</p>
+  </div>
+
+  <div class="section">
+    <h2>Disclaimer of Warranties</h2>
+    <p>HueDiary is provided <strong>"as is"</strong> and <strong>"as available"</strong>, without warranty of any kind, express or implied. We do not warrant that the app will be uninterrupted, error-free, or free of harmful components. To the fullest extent permitted by applicable law, we disclaim all warranties, including merchantability, fitness for a particular purpose, and non-infringement.</p>
+  </div>
+
+  <div class="section">
+    <h2>Limitation of Liability</h2>
+    <p>To the fullest extent permitted by applicable law, in no event will the HueDiary team be liable for any indirect, incidental, special, consequential, or punitive damages — including loss of data, loss of profits, or emotional distress — arising out of or in connection with your use of the app, even if we have been advised of the possibility of such damages.</p>
+    <p>Our total liability for any claim arising out of or relating to the app shall not exceed the amount you paid for the subscription in the 12 months preceding the event giving rise to the claim, or USD $50, whichever is greater.</p>
+  </div>
+
+  <div class="section">
+    <h2>Changes to the App and to These Terms</h2>
+    <p>We may update HueDiary from time to time, including adding, modifying, or removing features. We may also revise this User Agreement. When we do, we will update the "Last updated" date at the top of this page. Your continued use of the app after changes take effect constitutes acceptance of the revised terms.</p>
+  </div>
+
+  <div class="section">
+    <h2>Termination</h2>
+    <p>You may stop using HueDiary at any time by deleting the app from your device. We may suspend or terminate your access to the app — including any active subscription via the App Store's standard processes — if you materially breach this agreement.</p>
+  </div>
+
+  <div class="section">
+    <h2>Governing Law</h2>
+    <p>This User Agreement is governed by the laws of the People's Republic of China, without regard to its conflict-of-laws principles. Any dispute arising from this agreement or your use of HueDiary shall first be attempted to resolve through friendly negotiation.</p>
+  </div>
+
+  <div class="section">
+    <h2>Contact Us</h2>
+    <p>If you have questions about this User Agreement, please contact:</p>
+    <p><a class="inline-link" href="mailto:zhaopf095@gmail.com">zhaopf095@gmail.com</a></p>
+  </div>
+
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-logo">
+    <img src="images/huediary/logo.png" alt="HueDiary" />
+    HueDiary
+  </div>
+  <div class="footer-meta">
+    <span>© 2026 HueDiary. Color your feelings.</span>
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">粤ICP备2026050406号-1</a>
+  </div>
+</footer>
+
+</body>
+</html>

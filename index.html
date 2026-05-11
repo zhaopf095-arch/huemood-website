@@ -94,6 +94,92 @@
     }
     .nav-links a:hover { color: var(--white); }
 
+    /* ─── Our Work 下拉 ─── */
+    .nav-links .dropdown { position: relative; }
+    .dropdown-trigger {
+      color: var(--gray);
+      font-size: 15px;
+      font-weight: 400;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.25s;
+      user-select: none;
+    }
+    .dropdown-trigger::after {
+      content: '';
+      width: 0; height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid currentColor;
+      transition: transform 0.25s;
+    }
+    .dropdown-trigger:hover { color: var(--white); }
+    .dropdown:hover .dropdown-trigger { color: var(--white); }
+    .dropdown:hover .dropdown-trigger::after { transform: rotate(180deg); }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      min-width: 160px;
+      background: rgba(20, 18, 28, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 8px;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s, transform 0.25s, visibility 0s 0.25s;
+    }
+    .dropdown:hover .dropdown-menu,
+    .dropdown:focus-within .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+      transition: opacity 0.25s, transform 0.25s, visibility 0s 0s;
+    }
+    /* 三角小尖角 */
+    .dropdown-menu::before {
+      content: '';
+      position: absolute;
+      top: -6px; left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 12px; height: 12px;
+      background: rgba(20, 18, 28, 0.95);
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    /* hover 缓冲：避免移动到下拉时鼠标空隙触发关闭 */
+    .dropdown::after {
+      content: '';
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      height: 18px;
+    }
+    .dropdown-menu li { width: 100%; }
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 16px;
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .dropdown-menu a:hover {
+      background: rgba(139, 92, 246, 0.18);
+      color: var(--white);
+    }
+
     .nav-cta {
       display: flex;
       align-items: center;
@@ -562,7 +648,13 @@
     <span>HueMood</span>
   </a>
   <ul class="nav-links">
-    <li><a href="#work">Our Work</a></li>
+    <li class="dropdown" tabindex="0">
+      <span class="dropdown-trigger">Our Work</span>
+      <ul class="dropdown-menu">
+        <li><a href="#work">HueMood</a></li>
+        <li><a href="huediary.html">HueDiary</a></li>
+      </ul>
+    </li>
     <li><a href="#features">Features</a></li>
     <li><a href="privacy.html">Privacy Policy</a></li>
     <li><a href="#contact">Contact</a></li>
